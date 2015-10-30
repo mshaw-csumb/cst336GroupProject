@@ -1,0 +1,9 @@
+This will be the user story of our database. What we have so far:
+
+The database is in use in a costume store, the users of this database system
+will be able to see what type of costumes are in stock, and what accessories
+come with them. There will be a table with accessories, a table of costumes,
+and a table for which costumes go with what accessories. A typical user may 
+want to see how many size small superman costumes are available for example.
+Or they might want to see how many fake machetes come with the Jason Vorhes
+Hocky Mask.
