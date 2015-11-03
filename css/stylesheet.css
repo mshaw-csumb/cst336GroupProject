@@ -1,0 +1,56 @@
+ body 
+ {
+	background: linear-gradient(#000000, #2A1500);
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+   	color:white;
+	
+}
+ 
+ a
+ {
+ 	color:white;	
+ }
+  
+h1{
+	background-color:orange;
+}
+
+h2{
+	background-color:orange;
+}
+  
+  	
+table 
+{
+	margin-left: auto;
+	margin-right: auto;
+  	display: inline-block;
+  	border: 1px solid black;
+}
+
+
+p
+{
+	font-size: 1.3em;
+	color: white;
+
+}
+
+
+button
+{
+	background-color:#E6E65C;
+	font-size: 1.3em;
+	background:transparent;
+}
+
+button:hover
+{
+	background-color:#E6E65C;
+	font-size: 1.3em;
+
+}
+
