@@ -2,8 +2,8 @@
 
 function getDatabaseConnection() { 
     $host = "localhost"; 
-    $dbname = "lara4594";    //your otterid 
-    $username = "lara4594";     //your otterid 
+    $dbname = "shaw9409";    //your otterid 
+    $username = "shaw9409";     //your otterid 
     $password = "s3cr3t"; 
 
     //creates connection to database 
