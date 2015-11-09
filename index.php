@@ -6,26 +6,26 @@ $conn = getDatabaseConnection(); //gets database connection
 
 
 
-function displayCategories(){
-    $sql = "SELECT categoryId, categoryName
-        FROM oe_category WHERE 1";
+function displayTypes(){
+    $sql = "SELECT typeId, type
+        FROM tp_types WHERE 1";
     $records = getDataBySQL($sql);
     foreach ($records as $record){
-        echo "<option value = '" . $record['categoryId'] . 
-        "'>" . $record['categoryName'] . "</option>";
+        echo "<option value = '" . $record['typeId'] . 
+        "'>" . $record['type'] . "</option>";
     }
 } 
 
 function displayAllProducts() {
-    $sql = "SELECT productName, price, productId FROM oe_product";
+    $sql = "SELECT title, price, gender FROM tp_costumes";
     $records = getDataBySQL($sql);
     return $records;
     
-    /*
+    
     foreach($records as $record) {
-        echo $record['productName'] . "-" . $record['price'] . "<br>";
+        echo $record['title'] . "-" . $record['price'] . $record['gender'] . "<br>";
     }
-     */
+     
     
 }
 
@@ -118,11 +118,11 @@ function isHealthyChoiceChecked(){
     <div>
         
         <form method ="get">
-        Select Category: 
+        Select Costume Type: 
         
         <select name = "categoryId">
             <!-- this data should be coming from the database -->
-            <?=displayCategories() ?>
+            <?=displayTypes() ?>
             <!-- 
             <option    value = "1">Soft Drinks</option>
             <option value = "2">Snacks</option>
@@ -154,10 +154,10 @@ function isHealthyChoiceChecked(){
         if (!isset($_GET['searchForm'])) {
             $records = displayAllProducts();
         } else {
-            $records = filterProducts();
+            //$records = filterProducts();
         }
         
-        
+        /*
         foreach($records as $record) {
 				if(isset($record['productId']))
 				{
@@ -168,7 +168,7 @@ function isHealthyChoiceChecked(){
                   echo "</a>";
                   echo "- $" . $record['price'] . "<br>";
                
-        }
+        }*/
         
         
         ?>
