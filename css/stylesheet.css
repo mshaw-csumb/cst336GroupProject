@@ -6,7 +6,7 @@
     background-repeat: no-repeat;
     background-attachment: fixed;
    	color:white;
-	
+	padding:15px
 }
  
  a
@@ -54,3 +54,12 @@ button:hover
 
 }
 
+.info{
+	border:thin black solid;
+	padding:10px;
+	background:white;
+	
+}
+.desc{
+	text-decoration:underline;
+}

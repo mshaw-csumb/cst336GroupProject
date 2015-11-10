@@ -13,6 +13,12 @@ function displayTypes(){
 	
 	echo "<option value = 0>All</option>";
     foreach ($records as $record){
+    	
+		if($_GET['typeId'] == $record['typeId'])
+		{
+			 echo "<option value = '" . $record['typeId'] . 
+        	"' selected>" . $record['type'] . "</option>";
+		}
         echo "<option value = '" . $record['typeId'] . 
         "'>" . $record['type'] . "</option>";
     }
@@ -26,6 +32,11 @@ function displaySizes(){
 	echo "<option value = 0>All</option>";
 	foreach($records as $record)
 	{
+		if($_GET['sizeId'] == $record['sizeId'])
+		{
+			echo "<option value = '" . $record['sizeId'] .
+		"' selected>" . $record['size'] . "</option>";
+		}
 		echo "<option value = '" . $record['sizeId'] .
 		"'>" . $record['size'] . "</option>";
 	}
@@ -40,7 +51,7 @@ function displayAges(){
 	echo "<option value = 0>All</option>";
 	foreach($records as $record)
 	{
-		if($_GET['age'] == $record[ageId])
+		if($_GET['age'] == $record['ageId'])
 		{
 			echo "<option value = '" . $record['ageId'] .
 			" ' selected>" . $record['ageRange'] . "</option>";
@@ -66,6 +77,7 @@ function displayAllProducts() {
 			INNER JOIN tp_ageRanges ta
             ON tc.ageRange=ta.ageId";
 			//INNER JOIN tp_types tt ON tc.type=tt.typeId
+			
 	 $orderByFields = array("ASC", "DESC");
 	 $orderByIndex = array_search($_GET['order'],$orderByFields);	
 	 //$orderbyFields[$orderByIndex];
@@ -133,10 +145,10 @@ global $conn;
             }*/
             
             $orderByFields = array("ASC", "DESC");
-            //$orderByIndex = array_search($_GET['order'],$orderByFields);
+            $orderByIndex = array_search($_GET['order'],$orderByFields);
             
             //$sql .= " ORDER BY " . $_GET['orderBy'];
-            //$sql .= " ORDER BY PRICE " . $orderByFields[$orderByIndex]; //prevents SQL injection
+            $sql .= " ORDER BY title " . $orderByFields[$orderByIndex]; //prevents SQL injection
             
             
             $statement = $conn->prepare($sql);
@@ -249,7 +261,7 @@ function isHealthyChoiceChecked(){
         foreach($records as $record) {
 				if(isset($record['costumeId']))
 				{
-              	 echo "<a target='getProductIframe' href='getProductInfo.php?productId=" . $record['costumeId'] . "'>";
+              	 echo "<a target='getCostumeIframe' href='getCostumeInfo.php?costumeId=" . $record['costumeId'] . "'>";
 				}
 				
                   echo $record['title'];
@@ -267,7 +279,7 @@ function isHealthyChoiceChecked(){
         </div>
         <div style="float:left">
             
-            <iframe src="getProductInfo.php" name="getProductIframe" width="250" height="300" frameborder="0"/>
+            <iframe src="getCostumeInfo.php" name="getCostumeIframe" width="250" height="300" frameborder="0">
             </iframe>
             
         </div>
