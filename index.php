@@ -287,7 +287,7 @@ function isHealthyChoiceChecked(){
     </div>
 
     <footer style="clear:left">
-     <p>&copy; Copyright  by Kevin Brock, Markus Shaw, Vincent Durante, Mateo</p>
+     <p>&copy; Copyright  by Kevin Brock, Markus Shaw, Vincent Duarte, Mateo Sixtos</p>
     </footer>
   </div>
 </body>
