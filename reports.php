@@ -44,6 +44,16 @@ function sumOfTeenagers(){
 		echo "$" . $record['Sum'] . "<br>";
 	}	
 }
+
+function chokingHazardPrice(){
+	$sql = "SELECT chokingHazard, title, price, description
+			FROM tp_accessories
+			WHERE chokingHazard = 1 AND price < 5";
+	$records = getDataBySQL($sql);
+	foreach($records as $record){
+		echo $record['chokingHazard'] . "  " .$record['title'] . " - $" .$record['price'] . "  " .$record['description'] . "<br>";
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -93,6 +103,11 @@ function sumOfTeenagers(){
 		<h2>The sum of all the costumes whos age range is for teenagers.</h2>
 		<?php
 		sumOfTeenagers();
+		?>
+		
+		<h2>All accessories that are a choking hazard and are less then $5.</h2>
+		<?php
+		chokingHazardPrice();
 		?>
 		
     <footer style="clear:left">
