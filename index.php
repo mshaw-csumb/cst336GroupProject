@@ -60,13 +60,17 @@ function displayAllProducts() {
     //$sql = "SELECT title, price, gender 
     		//FROM tp_costumes WHERE 1";
 			//tt.type,
-	$sql=  "SELECT title, gender, ts.size,price,ta.ageRange 
+	$sql=  "SELECT costumeId, title, gender, ts.size,price,ta.ageRange 
 			FROM tp_costumes tc 
 			INNER JOIN tp_sizes ts ON tc.size= ts.sizeId
 			INNER JOIN tp_ageRanges ta
             ON tc.ageRange=ta.ageId";
 			//INNER JOIN tp_types tt ON tc.type=tt.typeId
-    $records = getDataBySQL($sql);
+	 $orderByFields = array("ASC", "DESC");
+	 $orderByIndex = array_search($_GET['order'],$orderByFields);	
+	 //$orderbyFields[$orderByIndex];
+	 $sql .= " ORDER BY title " . $orderByFields[$orderByIndex]; //prevents SQL injection		
+     $records = getDataBySQL($sql);
     
      return $records;
     
@@ -235,7 +239,9 @@ function isHealthyChoiceChecked(){
         //Displays all products by default
         if (!isset($_GET['searchForm'])) {
             $records = displayAllProducts();
-        } else {
+        } else if ($_GET['sizeId'] == "0" && $_GET['age'] == "0" && $_GET['typeId'] == 0){
+			$records = displayAllProducts();
+		}else {
             $records = filterProducts();
         }
         
