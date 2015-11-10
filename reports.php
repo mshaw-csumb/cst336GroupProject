@@ -84,6 +84,11 @@ function chokingHazardPrice(){
     <header>
       <h1>Reports</h1>
     </header>
+    
+    <nav>
+		<a href="index.php" target ="_blank">Costume Page</a> <br>
+		<a href="reports.php" target="_blank">Reports</a>
+	</nav>
     	<h2>The Most Expensive Item.</h2>
     	    	
     	<?php

@@ -77,7 +77,7 @@ function displayAllProducts() {
 			INNER JOIN tp_ageRanges ta
             ON tc.ageRange=ta.ageId";
 			//INNER JOIN tp_types tt ON tc.type=tt.typeId
-			
+	$_GET['order'] = "ASC";		
 	 $orderByFields = array("ASC", "DESC");
 	 $orderByIndex = array_search($_GET['order'],$orderByFields);	
 	 //$orderbyFields[$orderByIndex];
@@ -201,7 +201,11 @@ function isHealthyChoiceChecked(){
       <h1>Spooky's House of Costumes</h1>
       <h2>Please stop asking us for sexy corn costumes, we don't have any</h2>
     </header>
-
+	
+	<nav>
+		<a href="index.php" target ="_blank">Costume Page</a> <br>
+		<a href="reports.php" target="_blank">Reports</a> <br>
+	</nav>
     <div>
         
         <form method ="get">
