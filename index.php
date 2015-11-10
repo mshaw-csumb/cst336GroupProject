@@ -10,58 +10,129 @@ function displayTypes(){
     $sql = "SELECT typeId, type
         FROM tp_types WHERE 1";
     $records = getDataBySQL($sql);
+	
+	echo "<option value = 0>All</option>";
     foreach ($records as $record){
         echo "<option value = '" . $record['typeId'] . 
         "'>" . $record['type'] . "</option>";
     }
 } 
 
+function displaySizes(){
+	$sql = "SELECT sizeId, size 
+			FROM tp_sizes WHERE 1";
+			
+	$records = getDataBySQL($sql);
+	echo "<option value = 0>All</option>";
+	foreach($records as $record)
+	{
+		echo "<option value = '" . $record['sizeId'] .
+		"'>" . $record['size'] . "</option>";
+	}
+}
+
+function displayAges(){
+	$sql = "SELECT ageId, ageRange
+			FROM tp_ageRanges WHERE 1";
+			
+	$records = getDataBySQL($sql);
+	
+	echo "<option value = 0>All</option>";
+	foreach($records as $record)
+	{
+		if($_GET['age'] == $record[ageId])
+		{
+			echo "<option value = '" . $record['ageId'] .
+			" ' selected>" . $record['ageRange'] . "</option>";
+		}else if ($_GET['age'] != $record['ageId'])
+		{
+			echo "<option value = '" . $record['ageId'] .
+			"'>" . $record['ageRange'] . "</option>";
+		}
+			
+		
+		
+	}
+	
+}
+
 function displayAllProducts() {
-    $sql = "SELECT title, price, gender FROM tp_costumes";
+    //$sql = "SELECT title, price, gender 
+    		//FROM tp_costumes WHERE 1";
+			//tt.type,
+	$sql=  "SELECT title, gender, ts.size,price,ta.ageRange 
+			FROM tp_costumes tc 
+			INNER JOIN tp_sizes ts ON tc.size= ts.sizeId
+			INNER JOIN tp_ageRanges ta
+            ON tc.ageRange=ta.ageId";
+			//INNER JOIN tp_types tt ON tc.type=tt.typeId
     $records = getDataBySQL($sql);
-    return $records;
     
+     return $records;
     
+	/*
     foreach($records as $record) {
-        echo $record['title'] . "-" . $record['price'] . $record['gender'] . "<br>";
-    }
+        echo $record['title'] . "-" . $record['price'] . "-" . $record['gender'] . "<br>";
+    }*/
      
-    
+   
 }
 
 function filterProducts(){
 global $conn;
     if (isset($_GET['searchForm'])) {  //user submitted the filter form
         
-        $categoryId = $_GET['categoryId'];
-
-             $sql = "SELECT productName, price, productId 
-                FROM oe_product
-                WHERE categoryId = :categoryId"; //using Named Parameters (prevents SQL injection)
+        $typeId = $_GET['typeId'];
+		$sizeId = $_GET['sizeId'];
+		$ageRange = $_GET['age'];
+		//can filter by size, costume type, and age range
+           $sql = "SELECT costumeId, title, price, gender, ts.size,ta.ageRange 
+                FROM tp_costumes tc
+                INNER JOIN tp_sizes ts 
+                ON tc.size = ts.sizeId
+                INNER JOIN tp_ageRanges ta
+                ON tc.ageRange=ta.ageId
+                WHERE type = :typeId"; //using Named Parameters (prevents SQL injection)
             
             $namedParameters = array();
-            $namedParameters[":categoryId"] = $categoryId;
-            
-            $maxPrice = $_GET['maxPrice'];
-            
+            $namedParameters[":typeId"] = $typeId;
+           
+            /*if($typeId != "0")
+			{
+				$sql.= 
+			}*/
+            //$maxPrice = $_GET['maxPrice'];
+            if($sizeId != "0")
+			{
+				$sql.= " AND ts.sizeId = :sizeId";
+				 $namedParameters[":sizeId"] = $sizeId;
+			}
+			
+			if($ageRange != "0")
+			{
+				$sql.= " AND ta.ageId = :ageRange";
+				$namedParameters[":ageRange"] = $ageRange;
+			}
+			
+            /*
             if (!empty($maxPrice)) { //the user entered a max price value in the form
                 
                //$sql = $sql . " ";
                $sql .= " AND price <= :price"; //using named parameters
                $namedParameters[":price"] = $maxPrice;
              
-            }
-            
+            }*/
+            /*
             if (isset($_GET['healthyChoice'])) {
                 
                 $sql .= " AND healthyChoice = 1";
-            }
+            }*/
             
             $orderByFields = array("ASC", "DESC");
-            $orderByIndex = array_search($_GET['order'],$orderByFields);
+            //$orderByIndex = array_search($_GET['order'],$orderByFields);
             
             //$sql .= " ORDER BY " . $_GET['orderBy'];
-            $sql .= " ORDER BY PRICE " . $orderByFields[$orderByIndex]; //prevents SQL injection
+            //$sql .= " ORDER BY PRICE " . $orderByFields[$orderByIndex]; //prevents SQL injection
             
             
             $statement = $conn->prepare($sql);
@@ -120,7 +191,7 @@ function isHealthyChoiceChecked(){
         <form method ="get">
         Select Costume Type: 
         
-        <select name = "categoryId">
+        <select name = "typeId">
             <!-- this data should be coming from the database -->
             <?=displayTypes() ?>
             <!-- 
@@ -130,13 +201,24 @@ function isHealthyChoiceChecked(){
             -->
         </select>
             
-        Max Price: 
-        <input type="number" name = "maxPrice" value="<?=$_GET['maxPrice']?>">
+        Size:
+        <select name="sizeId">
+        	<!-- display sizes -->
+        	<?=displaySizes() ?>
+        </select>
         
-        <input type="checkbox" name="healthyChoice" id="healthyChoice"  <?=isset($_GET['healthyChoice'])?"checked":""?> />
-        <label for="healthyChoice">Healthy Choice</label>
+        Age Range: 
+        <select name="age">
+        	<?=displayAges() ?>
+        </select>
+        
+        <!--Max Price: 
+        <input type="number" name = "maxPrice" value="<?=$_GET['maxPrice']?>">-->
+        
+        <!--<input type="checkbox" name="healthyChoice" id="healthyChoice"  <?=isset($_GET['healthyChoice'])?"checked":""?> />
+        <label for="healthyChoice">Healthy Choice</label>-->
          
-         <strong>Order by:</strong>
+         <strong>Order by Title:</strong>
         <select name="order">
             <option value="ASC">Ascending</option>
             <option value="DESC">Descending</option>
@@ -154,21 +236,24 @@ function isHealthyChoiceChecked(){
         if (!isset($_GET['searchForm'])) {
             $records = displayAllProducts();
         } else {
-            //$records = filterProducts();
+            $records = filterProducts();
         }
         
-        /*
+        
         foreach($records as $record) {
-				if(isset($record['productId']))
+				if(isset($record['costumeId']))
 				{
-              	 echo "<a target='getProductIframe' href='getProductInfo.php?productId=" . $record['productId'] . "'>";
+              	 echo "<a target='getProductIframe' href='getProductInfo.php?productId=" . $record['costumeId'] . "'>";
 				}
 				
-                  echo $record['productName'];
+                  echo $record['title'];
                   echo "</a>";
-                  echo "- $" . $record['price'] . "<br>";
+                  echo "- $" . $record['price']; 
+                  echo " - " . "Gender: " . $record['gender']; 
+                  echo " - " . $record['size']; 
+                  echo " - " . "Age Level: " . $record['ageRange']. "<br><br>";
                
-        }*/
+        }
         
         
         ?>
